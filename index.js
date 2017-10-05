@@ -38,7 +38,8 @@ exports.formatTemplate = (template, templateData) => {
 
 function camelize(string) {
   const regexp = /[-_]([a-z])/g;
-  return string.replace(regexp, (match, char) => char.toUpperCase());
+  const camelized = string.replace(regexp, (match, char) => char.toUpperCase());
+  return camelized[0].toLowerCase() + camelized.slice(1);
 };
 
 Handlebars.registerHelper('pascalCase', (function() {
@@ -49,14 +50,8 @@ Handlebars.registerHelper('pascalCase', (function() {
 })());
 
 Handlebars.registerHelper('camelCase', (function() {
-  function camel(string) {
-    const words = string.split('-');
-    const camelizedWords = words.slice(1).map(word => camelize(word));
-    return [words[0]].concat(camelizedWords).join('');
-  }
-
   return function(options) {
-    return new Handlebars.SafeString(camel(options.fn(this)));
+    return new Handlebars.SafeString(camelize(options.fn(this)));
   }
 })());
 
