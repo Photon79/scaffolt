@@ -7,7 +7,7 @@ Install with npm: `npm install -g scaffolt`.
 ## Usage
 
 ```
-Usage: scaffolt <type> <name> [options]
+Usage: scaffolt <type> <moduleName> <name> [options]
 
 Options:
 
@@ -23,9 +23,9 @@ Options:
 Examples:
 
 ```bash
-scaffolt view user
-scaffolt model cart --revert
-scaffolt controller header --path controllers/regions
+scaffolt view user user
+scaffolt model user cart --revert
+scaffolt controller regions header --path controllers/regions
 scaffolt --list
 scaffolt collection --doc
 ```
