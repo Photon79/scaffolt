@@ -36,14 +36,24 @@ exports.formatTemplate = (template, templateData) => {
   return compiled(templateData).toString().replace(key, '\\');
 };
 
-Handlebars.registerHelper('camelize', (() => {
-  function camelize(string) {
-    const regexp = /[-_]([a-z])/g;
-    const rest = string.replace(regexp, (match, char) => char.toUpperCase());
-    return rest[0].toUpperCase() + rest.slice(1);
-  };
+function camelize(string) {
+  const regexp = /[-_]([a-z])/g;
+  const rest = string.replace(regexp, (match, char) => char.toUpperCase());
+  return rest[0].toUpperCase() + rest.slice(1);
+};
 
+Handlebars.registerHelper('camelize', (() => {
   return options => new Handlebars.SafeString(camelize(options.fn(this)));
+})());
+
+Handlebars.registerHelper('kebab', (() => {
+  function kebab(string) {
+    const words = string.split('-');
+    const camelizedWords = words.slice(1).map(word => camelize(word));
+    return [words[0]].concat(camelizedWords).join('');
+  }
+
+  return options => new Handlebars.SafeString(kebab(options.fn(this)));
 })());
 
 Handlebars.registerHelper('through', (() => {
