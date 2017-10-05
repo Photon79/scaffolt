@@ -42,8 +42,10 @@ function camelize(string) {
   return rest[0].toUpperCase() + rest.slice(1);
 };
 
-Handlebars.registerHelper('camelize', (() => {
-  return options => new Handlebars.SafeString(camelize(options.fn(this)));
+Handlebars.registerHelper('camelize', (function() {
+  return function(options) {
+    return new Handlebars.SafeString(camelize(options.fn(this)));
+  }
 })());
 
 Handlebars.registerHelper('kebab', (function() {
