@@ -347,7 +347,7 @@ var checkIfExists = function(generatorsPath, callback) {
   });
 };
 
-var scaffolt = module.exports = function(type, name, options, callback) {
+var scaffolt = module.exports = function(type, moduleName, name, options, callback) {
   // Set some default params.
   if (options == null) options = {};
   if (callback == null) callback = function() {};
@@ -361,7 +361,7 @@ var scaffolt = module.exports = function(type, name, options, callback) {
   if (generatorsPath == null) generatorsPath = 'generators';
   if (revert == null) revert = false;
 
-  var templateData = {name: name, pluralName: pluralName, parentPath: parentPath, type:type};
+  var templateData = {name: name, moduleName: moduleName, pluralName: pluralName, parentPath: parentPath, type:type};
   for(var key in options){
     switch(key[0]) {
       case '$':

@@ -6,7 +6,7 @@ var argv = process.argv;
 
 program
   .version(require('./package.json').version)
-  .usage('<type> <name> [options]')
+  .usage('<type> <moduleName> <name> [options]')
   .option('-p, --parentPath [path]', 'override path to directory to which recipe will be copied')
   .option('-r, --revert', 'should scaffolt revert changes done by previous scaffolding?')
   .option('-g, --generators [path]', 'path to directory which contains generators specifications [./generators]')
@@ -29,8 +29,7 @@ program.parse(process.argv);
 var args = program.args;
 var count = args.length;
 var first = args[0];
-var type, name;
-
+var type, moduleName, name;
 
 var scaffolt = require('./');
 
@@ -53,13 +52,15 @@ if (program.list) {
 
   if ([program.parentPath, program.revert, program.generators].indexOf(first) === -1) {
     type = first;
-    name = args[1];
+    moduleName = args[1];
+    name = args[2];
   } else {
-    type = args[count - 2];
+    type = args[count - 3];
+    moduleName = args[count - 2];
     name = args[count - 1];
   }
 
-  if (!type || !name) program.help();
+  if (!type || !name || !moduleName) program.help();
 
   var templateData = {
     parentPath: program.parentPath,
@@ -76,5 +77,7 @@ if (program.list) {
       templateData["@" + entry.substring(0, colon)] = entry.substring(colon + 1);
   }
 
-  scaffolt(type, name, templateData);
+
+  console.log(type, moduleName, name, templateData);
+//  scaffolt(type, moduleName, name, templateData);
 }
