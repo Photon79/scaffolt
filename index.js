@@ -46,18 +46,22 @@ Handlebars.registerHelper('camelize', (() => {
   return options => new Handlebars.SafeString(camelize(options.fn(this)));
 })());
 
-Handlebars.registerHelper('kebab', (() => {
+Handlebars.registerHelper('kebab', (function() {
   function kebab(string) {
     const words = string.split('-');
     const camelizedWords = words.slice(1).map(word => camelize(word));
     return [words[0]].concat(camelizedWords).join('');
   }
 
-  return options => new Handlebars.SafeString(kebab(options.fn(this)));
+  return function(options) {
+    return new Handlebars.SafeString(kebab(options.fn(this)));
+  }
 })());
 
-Handlebars.registerHelper('through', (() => {
-  return options => new Handlebars.SafeString("{{" + options.hash["value"] + "}}");
+Handlebars.registerHelper('through', (function() {
+  return function(options) {
+    return new Handlebars.SafeString("{{" + options.hash["value"] + "}}");
+  }
 })());
 
 exports.loadHelpers = helpersPath => {
