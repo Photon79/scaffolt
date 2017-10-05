@@ -38,25 +38,25 @@ exports.formatTemplate = (template, templateData) => {
 
 function camelize(string) {
   const regexp = /[-_]([a-z])/g;
-  const rest = string.replace(regexp, (match, char) => char.toUpperCase());
-  return rest[0].toUpperCase() + rest.slice(1);
+  return string.replace(regexp, (match, char) => char.toUpperCase());
 };
 
-Handlebars.registerHelper('camelize', (function() {
+Handlebars.registerHelper('pascalCase', (function() {
   return function(options) {
-    return new Handlebars.SafeString(camelize(options.fn(this)));
+    const camelString = camelize(options.fn(this));
+    return new Handlebars.SafeString(camelString[0].toUpperCase() + camelString.slice(1));
   }
 })());
 
-Handlebars.registerHelper('kebab', (function() {
-  function kebab(string) {
+Handlebars.registerHelper('camelCase', (function() {
+  function camel(string) {
     const words = string.split('-');
     const camelizedWords = words.slice(1).map(word => camelize(word));
     return [words[0]].concat(camelizedWords).join('');
   }
 
   return function(options) {
-    return new Handlebars.SafeString(kebab(options.fn(this)));
+    return new Handlebars.SafeString(camel(options.fn(this)));
   }
 })());
 
