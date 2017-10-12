@@ -7,6 +7,7 @@ const inflection = require('inflection');
 const mkdirp = require('mkdirp');
 const sysPath = require('path');
 const logger = require('loggy');
+const _ = require('lodash');
 
 function clone(object) {
   if (typeof object !== 'object') return object;
@@ -126,7 +127,23 @@ exports.scaffoldFile = (revert, from, base, method, templateData, parentPath, na
   templateData.pluralName = name ? inflection.pluralize(name) : templateData.pluralName
   templateData.parentPath = parentPath
 
+  if (parentPath === 'migrations') {
+    var files = fs.readdirSync(parentPath);
+
+    files = files.sort((a, b) => {
+      return Number(a.slice(0, 6)) < Number(b.slice(0, 6));
+    });
+
+    if (files.length === 0) {
+      templateData.fileNumber = '000005';
+    } else {
+      var fileNumber = (Number(files[0].slice(0,6)) + 5).toString();
+      templateData.fileNumber = _.padStart(fileNumber, 6, '0');
+    }
+  }
+
   const to = exports.formatTemplate(parentPath + '/' + base, templateData);
+
   if (revert && method !== 'append') {
     exports.destroyFile(to, callback);
   } else {
