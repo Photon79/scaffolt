@@ -54,6 +54,10 @@ if (program.list) {
     type = first;
     moduleName = args[1];
     name = args[2];
+
+    if (!name) {
+      name = moduleName;
+    }
   } else {
     type = args[count - 3];
     moduleName = args[count - 2];

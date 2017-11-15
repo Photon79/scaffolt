@@ -128,6 +128,10 @@ exports.scaffoldFile = (revert, from, base, method, templateData, parentPath, na
   templateData.parentPath = parentPath
 
   if (parentPath === 'migrations') {
+    if (!fs.existsSync(parentPath)) {
+      fs.mkdirSync(parentPath);
+    }
+
     var files = fs.readdirSync(parentPath);
 
     files = files.sort((a, b) => {
